@@ -1,0 +1,25 @@
+---
+- name: Stage1 provisioning
+  hosts: localhost
+  remote_user: root
+  become: true
+
+  tasks:
+    - name: Stop upgrades
+      ansible.builtin.systemd:
+        name: [apt-daily-upgrade.timer, apt-daily-upgrade.service, unattended-upgrades.service]
+        state: stopped
+        enabled: false
+
+    - name: Update local packages and install nginx
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: dist
+        cache_valid_time: 3600
+        name: nginx
+        state: present
+
+    - name: Create nginx ssl directory
+      ansible.builtin.file:
+        name: /etc/nginx/ssl
+        state: directory
