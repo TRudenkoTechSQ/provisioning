@@ -5,9 +5,10 @@
   become: true
 
   tasks:
-    - name: Stop upgrades
+
+    - name: Stop automatic upgrades
       ansible.builtin.systemd:
-        name: "{{ items }}" 
+        name: "{{ item }}" 
         state: stopped
         enabled: false
 
@@ -25,3 +26,13 @@
       ansible.builtin.file:
         name: /etc/nginx/ssl
         state: directory
+
+    - name: Delete nginx directories
+      ansible.builtin.file:
+        name: "{{ item }}"
+        state: absent
+
+      with_items:
+        - /etc/nginx/sites-enabled/default-https
+        - /etc/nginx/sites-enabled/default
+
