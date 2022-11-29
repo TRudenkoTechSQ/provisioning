@@ -7,15 +7,24 @@
   tasks:
     - name: Stop upgrades
       ansible.builtin.systemd:
-        name: [apt-daily-upgrade.timer, apt-daily-upgrade.service, unattended-upgrades.service]
+        name: apt-daily-upgrade.timer 
         state: stopped
         enabled: false
 
-    - name: Update local packages and install nginx
+    - name: Stop upgrade service
+      ansible.builtin.systemd:
+        name: apt-daily-upgrade.service
+        state: stopped
+        enabled: false
+
+    - name: Stop unattended upgrades
+      ansible.builtin.systemd:
+        name: unattended-upgrades.service
+        state: stopped
+        enabled: false
+
+    - name: install nginx
       ansible.builtin.apt:
-        update_cache: true
-        upgrade: dist
-        cache_valid_time: 3600
         name: nginx
         state: present
 
