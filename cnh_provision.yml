@@ -7,21 +7,14 @@
   tasks:
     - name: Stop upgrades
       ansible.builtin.systemd:
-        name: apt-daily-upgrade.timer 
+        name: "{{ items }}" 
         state: stopped
         enabled: false
 
-    - name: Stop upgrade service
-      ansible.builtin.systemd:
-        name: apt-daily-upgrade.service
-        state: stopped
-        enabled: false
-
-    - name: Stop unattended upgrades
-      ansible.builtin.systemd:
-        name: unattended-upgrades.service
-        state: stopped
-        enabled: false
+      with_items:
+        - apt-daily-upgrade.timer
+        - apt-daily-upgrade.service
+        - unattended-upgrades.service
 
     - name: install nginx
       ansible.builtin.apt:
