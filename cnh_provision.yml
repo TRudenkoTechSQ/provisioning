@@ -7,7 +7,7 @@
   tasks:
 
     - name: Stop automatic upgrades
-      ansible.builtin.systemd:
+      systemd:
         name: "{{ item }}"
         state: stopped
         enabled: false
@@ -17,8 +17,9 @@
         - apt-daily-upgrade.service
         - unattended-upgrades.service
 
+
     - name: install nginx
-      ansible.builtin.apt:
+      apt:
         name: "{{ item }}"
         state: present
 
@@ -33,10 +34,19 @@
         - environment-modules
         - nfs-common
 
+
     - name: Create nginx ssl directory
-      ansible.builtin.file:
+      file:
         name: /etc/nginx/ssl
         state: directory
+
+    - name: Generate SSL certificates
+      openssl_certificate:
+        path: /etc/nginx/ssl
+        privatekey_path: /etc/nginx/ssl/nginx.key
+        certificate_path: /etc/nginx/ssl/nginx.crt
+        days: 365
+        privatekey_size: 2048
 
     - name: Delete nginx directories
       ansible.builtin.file:
@@ -47,3 +57,8 @@
         - /etc/nginx/sites-enabled/default-https
         - /etc/nginx/sites-enabled/default
 
+    - name: Download the nginx default template
+      get_url:
+        url: https://raw.githubusercontent.com/christophernhill/prov-profiles/main/ronin/ubuntu20/all-in-one/nginx-default.template
+        dest: /etc/nginx/sites-available/default-http
+          
