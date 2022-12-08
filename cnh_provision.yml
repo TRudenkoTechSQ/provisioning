@@ -8,7 +8,7 @@
 
     - name: Stop automatic upgrades
       ansible.builtin.systemd:
-        name: "{{ item }}" 
+        name: "{{ item }}"
         state: stopped
         enabled: false
 
@@ -19,8 +19,19 @@
 
     - name: install nginx
       ansible.builtin.apt:
-        name: nginx
+        name: "{{ item }}"
         state: present
+
+      with_items:
+        - php7.4-fpm
+        - php7.4-cli
+        - php7.4-mysql
+        - php7.4-json
+        - php7.4-curl
+        - nginx
+        - jq
+        - environment-modules
+        - nfs-common
 
     - name: Create nginx ssl directory
       ansible.builtin.file:
