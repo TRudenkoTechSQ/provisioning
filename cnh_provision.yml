@@ -18,22 +18,19 @@
         - unattended-upgrades.service
 
 
-    - name: install nginx
+    - name: Installing packages
       apt:
-        name: "{{ item }}"
+        name: 
+          - php7.4-fpm
+          - php7.4-cli
+          - php7.4-mysql
+          - php7.4-json
+          - php7.4-curl
+          - nginx
+          - jq
+          - environment-modules
+          - nfs-common
         state: present
-
-      with_items:
-        - php7.4-fpm
-        - php7.4-cli
-        - php7.4-mysql
-        - php7.4-json
-        - php7.4-curl
-        - nginx
-        - jq
-        - environment-modules
-        - nfs-common
-
 
     - name: Create nginx ssl directory
       file:
