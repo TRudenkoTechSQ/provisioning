@@ -7,7 +7,7 @@
   tasks:
     - name: Installing packages
       apt:
-        name: 
+        name:
           - php7.4-fpm
           - php7.4-cli
           - php7.4-mysql
@@ -17,18 +17,14 @@
           - jq
           - environment-modules
           - nfs-common
+          - fail2ban
+
         state: present
 
     - name: Create nginx ssl directory
       file:
         name: /etc/nginx/ssl
         state: directory
-
-          #- name: Generate SSL certificates
-          #  openssl_certificate:
-          #    provider: selfsigned
-          #    path: /etc/nginx/ssl/nginx.crt
-          #    privatekey_path: /etc/nginx/ssl/nginx.key
 
     - name: Delete nginx directories
       ansible.builtin.file:
@@ -42,9 +38,7 @@
         url: https://raw.githubusercontent.com/christophernhill/prov-profiles/main/ronin/ubuntu20/all-in-one/nginx-default.template
         dest: /etc/nginx/sites-enabled/default
 
-    - name: Start nginx
-      service:
-        name: nginx
-        state: started
-
-          
+          #- name: Start nginx
+          #  service:
+          #    name: nginx
+          #    state: started
