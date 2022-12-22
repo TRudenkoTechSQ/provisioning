@@ -1,0 +1,20 @@
+.
+├── cnh_provision.yml             <- This is the primary ansible config file
+├── config_files                  <- These are the files I created to that were embedded in the scripts (I haven't done anything with them yet)
+|   |                                     
+│   ├── fail2ban.conf
+│   ├── html_test.html
+│   ├── jupyter_lab.service
+│   ├── nginx.conf
+│   └── php_test.html
+|      
+├── docker_testing                <- This is where you can test your changes in chh_provision.yml *sans systemd things* 
+|   |                              
+│   ├── Dockerfile
+│   ├── provision_test.yml        <- File created in test_config.sh this is a carbon copy of cnh_provision.yml\
+│   ├── README.md                    that will be the basis for the file that you'll test in your docker container 
+│   └── test_config.sh
+├── project_map.txt               
+└── README.md
+
+2 directories, 12 files

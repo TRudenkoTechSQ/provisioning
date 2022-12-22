@@ -40,7 +40,7 @@
 
 
   tasks:
-    # Check README in ./docker_testing about this
+    
     - name: Stop automatic upgrades
       systemd:
         name:
