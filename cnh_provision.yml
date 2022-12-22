@@ -4,8 +4,43 @@
   remote_user: root
   become: true
 
-  tasks:
 
+  vars:
+    # The wget URLS in the prov-profile scripts are converted into a list of dictionaries to then loop over
+    github_files:
+      - url: https://raw.githubusercontent.com/christophernhill/prov-profiles/main/ronin/ubuntu20/all-in-one/login.php.template
+        location: /var/www/html/login.php
+
+      - url: https://raw.githubusercontent.com/christophernhill/prov-profiles/main/ronin/ubuntu20/all-in-one/index3.php.template
+        location: /var/www/html/index3.php 
+
+      - url: https://raw.githubusercontent.com/christophernhill/prov-profiles/main/ronin/ubuntu20/all-in-one/auth_index.php.template
+        location: /var/www/html/auth_index.php
+
+      - url: https://raw.githubusercontent.com/christophernhill/prov-profiles/main/ronin/ubuntu20/all-in-one/prov_functions.php.template
+        location: /var/www/php/prov/functions.php
+
+      - url: https://raw.githubusercontent.com/christophernhill/prov-profiles/main/ronin/ubuntu20/all-in-one/jupyter.php.template
+        location: /var/www/html/jupyter.php
+
+      - url: https://raw.githubusercontent.com/christophernhill/prov-profiles/main/ronin/ubuntu20/all-in-one/get_current_jupyter_lab_port.sh.template
+        location: get_current_jupyter_lab_port.sh
+
+      - url: https://raw.githubusercontent.com/christophernhill/prov-profiles/main/ronin/ubuntu20/all-in-one/environment.yml
+        location: /home/ubuntu/miniconda3/
+
+      - url: https://repo.anaconda.com/miniconda/Miniconda3-py39_4.10.3-Linux-x86_64.sh
+        location: /home/ubuntu/miniconda3/
+
+      - url: https://raw.githubusercontent.com/christophernhill/prov-profiles/main/ronin/ubuntu20/all-in-one/get_free_port.sh
+        location: /home/ubuntu 
+
+      - url:  https://raw.githubusercontent.com/christophernhill/prov-profiles/main/ronin/ubuntu20/all-in-one/start_jupyter.sh
+        location: /home/ubuntu
+
+
+  tasks:
+    
     - name: Stop automatic upgrades
       systemd:
         name:
@@ -33,26 +68,35 @@
 
         state: present
 
-    - name: Create nginx ssl directory
-      file:
-        name: /etc/nginx/ssl
+
+    - name: Create directories
+      ansible.builtin.file:
+        name: 
+          - /etc/nginx/ssl
+          - /var/www/php/prov
+          - /apache_lua
+          - /home/ubuntu/.jupyter            
+          - /home/root
+          - /usr/sbin
+          - /state/partition1/llgrid/pkg
+
         state: directory
+
 
     - name: Delete nginx directories
       ansible.builtin.file:
         name: 
           - /etc/nginx/sites-enabled/default-https
           - /etc/nginx/sites-enabled/default
+
         state: absent
 
-    - name: Download the nginx default template
+
+    - name: Download and install files 
+
       get_url:
         url: https://raw.githubusercontent.com/christophernhill/prov-profiles/main/ronin/ubuntu20/all-in-one/nginx-default.template
         dest: /etc/nginx/sites-enabled/default
 
   
 
-          #- name: Start nginx
-          #  service:
-          #    name: nginx
-          #    state: started

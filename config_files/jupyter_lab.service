@@ -1,0 +1,21 @@
+# service name:     jupyter-lab.service
+# path:             /lib/systemd/system/jupyter-lab.service
+[Unit]
+Description=Jupyter Lab Server
+[Service]
+Type=simple
+PIDFile=/run/jupyter-lab.pid
+EnvironmentFile=/home/ubuntu/.jupyter/env
+
+# Jupyter Notebook: change PATHs as needed for your system
+# ExecStart=/home/ubuntu/miniconda3/envs/mit-ronin-conda-2022a/bin/jupyter-lab --no-browser --ServerApp.token='' --ServerApp.password='' --ServerApp.ip='*'
+# ExecStart=/home/ubuntu/miniconda3/envs/mit-ronin-conda-2022a/bin/jupyter-lab --no-browser --ServerApp.token='' --ServerApp.password=''
+#
+ExecStart=/home/ubuntu/start_jupyter.sh
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu
+Restart=always
+RestartSec=10
+[Install]
+WantedBy=multi-user.target
